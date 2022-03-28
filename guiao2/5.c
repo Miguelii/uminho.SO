@@ -53,7 +53,6 @@ int main() {
         pid = fork();
         arr[i] = pid;
         if(pid == 0) {
-            aux[i] = getpid();
             //percorrer as colunas da matrix até encontrar o numero
             for(int j=0;j<col;j++) {
                 if(matrix[i][j] == num) {
@@ -75,6 +74,11 @@ int main() {
                 ocorr++;
                 for(int j=0;j<linhas;j++) {
                     if(arr[j] == pid) printf("Linha: %d Pid: %d \n",j,pid); 
+                    /*
+                    char str[256];
+                    snprintf(str,sizeof(str),"%d",i);
+                    write(1,str,sizeof(str));
+                    */
                 }
             }
 
@@ -83,8 +87,7 @@ int main() {
     
     printf("Ocorr: %d \n",ocorr);
     printmatrix();
-    for(int i=0;i<linhas;i++) printf("Array: %d ",arr[i]);
-
+    for(int i=0;i<linhas;i++) printf("Array: %d \n",arr[i]);
 
     return 0;
 }
