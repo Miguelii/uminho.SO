@@ -33,7 +33,17 @@ int mySystem(char *comand) {
         buf[i]=strtok(NULL, " ");
         i++;
     }
+
+    /* OU
+    // Tirar o buf[i] = token; e i++;
     
+    while (token != NULL) {
+        buf[i++] = token;
+        token = strtok(NULL, " ");
+    }
+    buf[i] = NULL;
+    */
+
     pid_t pid;
     pid = fork();
 
