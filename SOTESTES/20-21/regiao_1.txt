@@ -1,0 +1,4 @@
+Manuel 60
+Pedro 20
+Mario 12
+Fábio 60
