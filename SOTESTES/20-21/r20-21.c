@@ -12,7 +12,7 @@
 
 // 1)
 
-/*
+
 int main(int argc, char *argv[]) {
 
     pid_t pid;
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
         if(pid == 0) {
 
-            execvp(argv[1], &argv[2]);
+            execvp(argv[i], &argv[i]);
         }
         int status;
         pid_t pid = wait(&status);
@@ -49,21 +49,23 @@ int main(int argc, char *argv[]) {
         execlp("grep","grep","VmPeak",procPidString,NULL);
     }
 
+    close(p[1]);
+
     dup2(p[0],0);
     close(p[0]);
-    close(p[1]);
 
     execlp("cut","cut","-d"," ","-f4",NULL);
 
     return 0;
 }
 
-*/
+/*
 
-// 3)
+// 3) INCOMPLETO
 
 int seconds = 0;
 int rondas = 0;
+int *pids = NULL;
 
 void sigalarm_handler (int signum){
     seconds ++; 
@@ -74,7 +76,7 @@ void sigint_handler (int signum) {
 
     printf("Rondas Finalizadas: %d\n",rondas);
 
-    //kill(getpid(),SIGKILL);
+    kill(getpid(),SIGKILL);
 
     exit(0);
 }
@@ -95,13 +97,12 @@ int main() {
 
     alarm(1);
 
-    pid_t pid;
 
     while(1) {
 
         int i;
+        pid_t pid;
         for(i=1; i<100;i++) {
-
             pid=fork();
 
             if(pid == 0) {
@@ -111,7 +112,7 @@ int main() {
             pid_t pid = wait(&status);
 
             if(seconds > 20) {
-                kill(pid,SIGKILL);
+                kill(getpid(),SIGKILL);
                 break; //acabar ronda se passar dos 20 segundos
             }
         }
@@ -130,3 +131,5 @@ int main() {
     return 0;
 
 }
+
+*/

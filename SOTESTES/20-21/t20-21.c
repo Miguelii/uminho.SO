@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdbool.h>
 
 
 // 1)
@@ -24,7 +25,8 @@ int server() {
     while (1) {
 
         while(read(leitura,buffer, sizeof(buffer)) >0 ) {
-
+            
+            
         }
 
     }
@@ -43,9 +45,7 @@ int vacinados(char *regiao, int idade) {
     char idadeString[6];
     sprintf(idadeString, "%d", idade);
 
-    int fd = open(regiao,O_WRONLY);
-    if (fd == -1) perror("Erro no open");
-
+    
     int p[2];
     if(pipe(p) == -1) perror("Erro no pipe");
 
@@ -84,11 +84,12 @@ int vacinado(char* cidadao) {
 
         if(pid == 0) {
 
+            //Assumimos que os ficheiros tem o nome de regiao_i, sendo i
+            // o nr da regiao de 1 a 9
             char ficheiro[15];
             sprintf(ficheiro, "regiao_%d.txt",i);
 
-            execlp("grep","grep",cidadao, ficheiro,NULL);
-            _exit(0);
+            execlp("grep","grep",cidadao,ficheiro,NULL);
         }
     }
     
@@ -98,7 +99,7 @@ int vacinado(char* cidadao) {
         int status;
         pid_t pid = wait(&status);
 
-        if(WIFEXITED(status) == 0) {
+        if(WEXITSTATUS(status) == 0) {
             res = 0;
         }
     }
@@ -114,8 +115,9 @@ int vacinado(char* cidadao) {
 int main() {
 
 
+    
     /*
-    2)
+    //2)
     
     char *filePath = "regiao_1.txt";
     int idade = 60;
@@ -127,9 +129,10 @@ int main() {
     3)
     */
 
+    
     char *cidadao = "Miguel";
     
     printf("EX3): %d \n", vacinado(cidadao));
-
+    
     return 0;
 }

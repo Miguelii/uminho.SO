@@ -9,31 +9,36 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+int numeroFilhos = 0;
+int *pids = NULL;
 
+void child_handler(int signum) {
+    if (pids == NULL) _exit(-1);
+
+    for (int i = 0; i < numeroFilhos; i++) {
+        kill(pids[i], SIGKILL);
+    }
+    _exit(0);
+}
 
 int main (int argc, char *argv[]) {
-    int index = 3;
+    
+    int processos = argc-3;
+    pids = (int *) malloc(sizeof(int) * processos);
 
-    for(int i = argc-3; i<=argc-3;i++) {
+    signal(SIGCHLD, child_handler);
+
+    for(int i = 1; i<=argc-3;i++) {
         pid_t pid;
         pid = fork();
         
         if(pid == 0) {
-            int fd = open(argv[index],O_RDONLY);
-
-            execlp("grep","grep",argv[2],fd,NULL);
-            _exit(i);
-        }
-        index++;
-    }
-
-    for(int i = argc-3; i<=argc-3;i++) {
-        int status;
-        pid_t pid = wait(&status);
-        if(WIFEXITED(status)) {
-            printf("Pid: %d, _exit: %d \n", pid, WEXITSTATUS(status));
+            execlp("grep","grep",argv[2],argv[2+i],NULL);
+        } else {
+            pids[numeroFilhos++] = pid;
         }
     }
 
-    return 1;
+    
+    return 0;
 }
