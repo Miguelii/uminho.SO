@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stat.h": "c",
-        "2.C": "cpp"
+        "2.C": "cpp",
+        "types.h": "c"
     }
 }

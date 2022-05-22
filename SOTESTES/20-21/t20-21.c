@@ -78,11 +78,11 @@ int vacinados(char *regiao, int idade) {
 
 int vacinado(char* cidadao) {
 
+    int pids[9];
     for(int i = 1; i<= 9; i++) {
-        pid_t pid;
-        pid = fork();
+        pids[i] = fork();
 
-        if(pid == 0) {
+        if(pids[i] == 0) {
 
             //Assumimos que os ficheiros tem o nome de regiao_i, sendo i
             // o nr da regiao de 1 a 9
@@ -101,6 +101,10 @@ int vacinado(char* cidadao) {
 
         if(WEXITSTATUS(status) == 0) {
             res = 0;
+
+            for(int i = 0; i< 9; i++) {
+                kill(pids[i],SIGKILL);
+            }
         }
     }
 
