@@ -30,12 +30,15 @@ int substitui (char* palavra, char* palavra_nova, char* ficheiro) {
 
     if(res >= 0) {
         printf("Inserido\n");
+        close(fd);
         return 0;
 
     } else {
         perror("Erro write");
+        close(fd);
         return 1;
     }
+
 }
 
 

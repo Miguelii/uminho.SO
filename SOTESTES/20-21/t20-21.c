@@ -20,22 +20,42 @@ int server() {
 
     int leitura = open("fifo", O_RDONLY);
 
+    int path[9];
+
+    for(int i=1;i<=9;i++) {
+        char ficheiro[10];
+
+        sprintf(ficheiro, "regiao_%d",i);
+
+        path[i] = open(ficheiro, O_WRONLY | O_CREAT, 0644);
+        if (path[i]<0) perror("Erro open");
+    }
 
     char buffer[1024];
+
     while (1) {
 
-        while(read(leitura,buffer, sizeof(buffer)) >0 ) {
+        while(read(leitura,buffer, sizeof(buffer)) >0) {
             
-            
-        }
+            char ** campos = parse_entry(&buffer);
 
+            char linha[strlen(campos[0]) + strlen(campos[1]) + strlen(campos[2]) + 5];
+
+            sprintf(linha, "%s %s %s \n",campos[0],campos[1],campos[2]);
+
+            write(path[atoi(campos[2])],linha,sizeof(linha));
+        }
     }
 
 
 
+    for(int i=1;i<=9;i++) {
+        close(path[i]);
+    }
+
+    return 0;
+
 }
-
-
 
 
 // 2)
@@ -73,6 +93,7 @@ int vacinados(char *regiao, int idade) {
 
     return 0;
 }
+
 
 // 3)
 
@@ -120,14 +141,14 @@ int main() {
 
 
     
-    /*
+    
     //2)
     
     char *filePath = "regiao_1.txt";
     int idade = 60;
 
     vacinados(filePath,idade);
-    */
+    
 
     /*
     3)
